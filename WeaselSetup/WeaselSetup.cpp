@@ -7,9 +7,12 @@
 #include <thread>
 
 #include "InstallOptionsDlg.h"
-
+#include <filesystem>
 #include <ShellScalingApi.h>
 #pragma comment(lib, "Shcore.lib")
+
+namespace fs = std::filesystem;
+
 CAppModule _Module;
 
 static int Run(LPTSTR lpCmdLine);
@@ -130,6 +133,10 @@ static int CustomInstall(bool installing) {
                MB_ICONERROR | MB_OK);
     return 1;
   }
+  auto log_dir{ fs::path(std::format(LR"({}\logs)", user_dir)) };
+	if (!fs::exists(log_dir)){
+		fs::create_directories(log_dir);
+	}
   if (_has_installed) {
     std::wstring dir(install_dir());
     std::thread th([dir]() {

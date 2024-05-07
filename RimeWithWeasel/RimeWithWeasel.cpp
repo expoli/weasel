@@ -87,6 +87,10 @@ void _RefreshTrayIcon(const RimeSessionId session_id,
 }
 
 void RimeWithWeaselHandler::_Setup() {
+  auto log_dir{ fs::path(std::format(R"({}\logs)", weasel_user_data_dir())) };
+  if (!fs::exists(log_dir)){
+	  fs::create_directories(log_dir);
+  }
   RIME_STRUCT(RimeTraits, weasel_traits);
   std::string shared_dir =
       wstring_to_string(WeaselSharedDataPath().wstring(), CP_UTF8);
@@ -100,6 +104,7 @@ void RimeWithWeaselHandler::_Setup() {
   weasel_traits.distribution_code_name = WEASEL_CODE_NAME;
   weasel_traits.distribution_version = WEASEL_VERSION;
   weasel_traits.app_name = "rime.weasel";
+  weasel_traits.log_dir = log_dir.string().data();
   RimeSetup(&weasel_traits);
   RimeSetNotificationHandler(&RimeWithWeaselHandler::OnNotify, this);
 }
