@@ -70,7 +70,7 @@ jobs:
         shell: bash
         run: |
           ./install_boost.bat
-          ./build.bat boost arm64
+          ./build.bat boost
 
       - uses: ilammy/msvc-dev-cmd@v1
 
@@ -91,7 +91,7 @@ jobs:
         id: build_weasel
         run: |
           $ErrorActionPreference = 'Stop'
-          .\build.bat ARM64 installer
+          .\build.bat installer
 
       - name: Compress Debug Symbols
         shell: pwsh
@@ -144,7 +144,7 @@ jobs:
         shell: bash
         run: |
           ./install_boost.bat
-          ./build.bat boost arm64
+          ./build.bat boost
 
       # xmake 2.9.4 or later
       - uses: xmake-io/github-action-setup-xmake@v1
