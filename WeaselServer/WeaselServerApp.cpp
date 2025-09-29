@@ -41,7 +41,8 @@ int WeaselServerApp::Run() {
 
   DEBUG << "开始 m_server.Run() PID: " << GetCurrentProcessId();
   int ret = m_server.Run();
-  DEBUG << "m_server.Run() 结束，返回值: " << ret << " PID: " << GetCurrentProcessId();
+  DEBUG << "m_server.Run() 结束，返回值: " << ret
+        << " PID: " << GetCurrentProcessId();
 
   m_handler->Finalize();
   m_ui.Destroy();

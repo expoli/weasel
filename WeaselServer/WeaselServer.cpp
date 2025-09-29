@@ -101,7 +101,8 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
       }
       int retry = 0;
       while (client.Connect() && retry < 10) {
-        DEBUG << "重试关闭服务器，第 " << retry + 1 << " 次 PID: " << GetCurrentProcessId();
+        DEBUG << "重试关闭服务器，第 " << retry + 1
+              << " 次 PID: " << GetCurrentProcessId();
         client.ShutdownServer();
         retry++;
         Sleep(50);
@@ -110,7 +111,8 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
         DEBUG << "重试次数过多，放弃启动 PID: " << GetCurrentProcessId();
         return 0;
       }
-      DEBUG << "成功关闭现有服务器，继续启动新实例 PID: " << GetCurrentProcessId();
+      DEBUG << "成功关闭现有服务器，继续启动新实例 PID: "
+            << GetCurrentProcessId();
     } else if (quit) {
       DEBUG << "没有运行中的服务器且为退出命令 PID: " << GetCurrentProcessId();
       return 0;
@@ -133,7 +135,8 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
     RegisterApplicationRestart(NULL, 0);
     DEBUG << "开始运行 WeaselServerApp PID: " << GetCurrentProcessId();
     nRet = app.Run();
-    DEBUG << "WeaselServerApp 运行结束，返回值: " << nRet << " PID: " << GetCurrentProcessId();
+    DEBUG << "WeaselServerApp 运行结束，返回值: " << nRet
+          << " PID: " << GetCurrentProcessId();
   } catch (...) {
     // bad luck...
     DEBUG << "WeaselServerApp 运行异常 PID: " << GetCurrentProcessId();

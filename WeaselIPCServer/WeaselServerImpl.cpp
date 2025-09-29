@@ -143,12 +143,14 @@ int ServerImpl::Start() {
   DEBUG << "ServerImpl::Start() 开始 PID: " << GetCurrentProcessId();
   std::wstring instanceName = L"(WEASEL)Furandōru-Sukāretto-";
   instanceName += getUsername();
-  DEBUG << "创建互斥锁: " << instanceName.c_str() << " PID: " << GetCurrentProcessId();
+  DEBUG << "创建互斥锁: " << instanceName.c_str()
+        << " PID: " << GetCurrentProcessId();
   HANDLE hMutexOneInstance = ::CreateMutex(NULL, FALSE, instanceName.c_str());
   DWORD lastError = ::GetLastError();
-  bool areYouOK = (lastError == ERROR_ALREADY_EXISTS ||
-                   lastError == ERROR_ACCESS_DENIED);
-  DEBUG << "互斥锁检查结果 PID: " << GetCurrentProcessId() << " LastError: " << lastError << " areYouOK: " << areYouOK;
+  bool areYouOK =
+      (lastError == ERROR_ALREADY_EXISTS || lastError == ERROR_ACCESS_DENIED);
+  DEBUG << "互斥锁检查结果 PID: " << GetCurrentProcessId()
+        << " LastError: " << lastError << " areYouOK: " << areYouOK;
 
   if (areYouOK) {
     DEBUG << "发现已存在实例，退出 PID: " << GetCurrentProcessId();
@@ -156,7 +158,8 @@ int ServerImpl::Start() {
   }
 
   HWND hwnd = Create(NULL);
-  DEBUG << "ServerImpl::Start() 完成，HWND: " << hwnd << " PID: " << GetCurrentProcessId();
+  DEBUG << "ServerImpl::Start() 完成，HWND: " << hwnd
+        << " PID: " << GetCurrentProcessId();
 
   return (int)hwnd;
 }
