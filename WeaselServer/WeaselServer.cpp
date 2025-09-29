@@ -22,6 +22,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
                      HINSTANCE /*hPrevInstance*/,
                      LPTSTR lpstrCmdLine,
                      int nCmdShow) {
+  DEBUG << "启动了: " << GetCurrentProcessId();
   LANGID langId = get_language_id();
   SetThreadUILanguage(langId);
   SetThreadLocale(langId);
@@ -88,22 +89,34 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
   bool quit = !wcscmp(L"/q", lpstrCmdLine) || !wcscmp(L"/quit", lpstrCmdLine);
   // restart if already running
   {
+    DEBUG << "检查是否有运行中的服务器 PID: " << GetCurrentProcessId();
     weasel::Client client;
     if (client.Connect())  // try to connect to running server
     {
+      DEBUG << "连接到现有服务器成功，正在关闭 PID: " << GetCurrentProcessId();
       client.ShutdownServer();
-      if (quit)
+      if (quit) {
+        DEBUG << "退出命令，直接返回 PID: " << GetCurrentProcessId();
         return 0;
+      }
       int retry = 0;
       while (client.Connect() && retry < 10) {
+        DEBUG << "重试关闭服务器，第 " << retry + 1 << " 次 PID: " << GetCurrentProcessId();
         client.ShutdownServer();
         retry++;
         Sleep(50);
       }
-      if (retry >= 10)
+      if (retry >= 10) {
+        DEBUG << "重试次数过多，放弃启动 PID: " << GetCurrentProcessId();
         return 0;
-    } else if (quit)
+      }
+      DEBUG << "成功关闭现有服务器，继续启动新实例 PID: " << GetCurrentProcessId();
+    } else if (quit) {
+      DEBUG << "没有运行中的服务器且为退出命令 PID: " << GetCurrentProcessId();
       return 0;
+    } else {
+      DEBUG << "没有运行中的服务器，继续启动 PID: " << GetCurrentProcessId();
+    }
   }
 
   bool check_updates = !wcscmp(L"/update", lpstrCmdLine);
@@ -115,16 +128,21 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
 
   int nRet = 0;
   try {
+    DEBUG << "创建 WeaselServerApp 实例 PID: " << GetCurrentProcessId();
     WeaselServerApp app;
     RegisterApplicationRestart(NULL, 0);
+    DEBUG << "开始运行 WeaselServerApp PID: " << GetCurrentProcessId();
     nRet = app.Run();
+    DEBUG << "WeaselServerApp 运行结束，返回值: " << nRet << " PID: " << GetCurrentProcessId();
   } catch (...) {
     // bad luck...
+    DEBUG << "WeaselServerApp 运行异常 PID: " << GetCurrentProcessId();
     nRet = -1;
   }
 
   _Module.Term();
   ::CoUninitialize();
 
+  DEBUG << "退出了: " << GetCurrentProcessId();
   return nRet;
 }

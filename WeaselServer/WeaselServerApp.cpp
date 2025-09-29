@@ -13,8 +13,12 @@ WeaselServerApp::WeaselServerApp()
 WeaselServerApp::~WeaselServerApp() {}
 
 int WeaselServerApp::Run() {
-  if (!m_server.Start())
+  DEBUG << "WeaselServerApp::Run() 开始 PID: " << GetCurrentProcessId();
+  if (!m_server.Start()) {
+    DEBUG << "m_server.Start() 失败 PID: " << GetCurrentProcessId();
     return -1;
+  }
+  DEBUG << "m_server.Start() 成功 PID: " << GetCurrentProcessId();
 
   // win_sparkle_set_appcast_url("http://localhost:8000/weasel/update/appcast.xml");
   win_sparkle_set_registry_path("Software\\Rime\\Weasel\\Updates");
@@ -35,12 +39,15 @@ int WeaselServerApp::Run() {
   tray_icon.Create(m_server.GetHWnd());
   tray_icon.Refresh();
 
+  DEBUG << "开始 m_server.Run() PID: " << GetCurrentProcessId();
   int ret = m_server.Run();
+  DEBUG << "m_server.Run() 结束，返回值: " << ret << " PID: " << GetCurrentProcessId();
 
   m_handler->Finalize();
   m_ui.Destroy();
   tray_icon.RemoveIcon();
   win_sparkle_cleanup();
+  DEBUG << "WeaselServerApp::Run() 清理完成 PID: " << GetCurrentProcessId();
 
   return ret;
 }

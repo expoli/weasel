@@ -140,22 +140,29 @@ DWORD ServerImpl::OnCommand(WEASEL_IPC_COMMAND uMsg,
 }
 
 int ServerImpl::Start() {
+  DEBUG << "ServerImpl::Start() 开始 PID: " << GetCurrentProcessId();
   std::wstring instanceName = L"(WEASEL)Furandōru-Sukāretto-";
   instanceName += getUsername();
+  DEBUG << "创建互斥锁: " << instanceName.c_str() << " PID: " << GetCurrentProcessId();
   HANDLE hMutexOneInstance = ::CreateMutex(NULL, FALSE, instanceName.c_str());
-  bool areYouOK = (::GetLastError() == ERROR_ALREADY_EXISTS ||
-                   ::GetLastError() == ERROR_ACCESS_DENIED);
+  DWORD lastError = ::GetLastError();
+  bool areYouOK = (lastError == ERROR_ALREADY_EXISTS ||
+                   lastError == ERROR_ACCESS_DENIED);
+  DEBUG << "互斥锁检查结果 PID: " << GetCurrentProcessId() << " LastError: " << lastError << " areYouOK: " << areYouOK;
 
   if (areYouOK) {
+    DEBUG << "发现已存在实例，退出 PID: " << GetCurrentProcessId();
     return 0;  // assure single instance
   }
 
   HWND hwnd = Create(NULL);
+  DEBUG << "ServerImpl::Start() 完成，HWND: " << hwnd << " PID: " << GetCurrentProcessId();
 
   return (int)hwnd;
 }
 
 int ServerImpl::Stop() {
+  DEBUG << "ServerImpl::Stop() 调用 PID: " << GetCurrentProcessId();
   // DO NOT exit process or finalize here
   // Let WeaselServer handle this
   PostMessage(WM_QUIT);
