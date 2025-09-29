@@ -51,7 +51,7 @@ jobs:
 
       - uses: ilammy/msvc-dev-cmd@v1
         with:
-          sdk: 10.0.19041.0
+          sdk: 10.0.22621.0
 
       # use upper stream released librime files if stable release
       - name: Get Rime files
@@ -71,7 +71,7 @@ jobs:
           RELEASE_BUILD: 1
         shell: cmd
         run: |
-          set SDKVER=10.0.19041.0
+          set SDKVER=10.0.22621.0
           .\build.bat arm64 installer
 
       - name: Build Weasel Nightly
@@ -79,7 +79,7 @@ jobs:
         if: github.ref == 'refs/heads/master'
         shell: cmd
         run: |
-          set SDKVER=10.0.19041.0
+          set SDKVER=10.0.22621.0
           .\build.bat arm64 installer
 
       - name: Compress Debug Symbols
