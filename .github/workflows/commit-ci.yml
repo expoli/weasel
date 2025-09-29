@@ -153,6 +153,8 @@ jobs:
           actions-cache-folder: '.xmake-cache'
 
       - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
 
       - name: Get Rime files
         shell: pwsh
@@ -170,5 +172,5 @@ jobs:
         id: build_weasel
         shell: cmd
         run: |
-          .\xbuild.bat ARM64 installer
+          .\xbuild.bat installer
 

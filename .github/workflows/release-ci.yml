@@ -50,8 +50,8 @@ jobs:
           ./build.bat boost arm64
 
       - uses: ilammy/msvc-dev-cmd@v1
-        # with:
-        #   sdk: 10.0.22621.0
+        with:
+          arch: x64
 
       # use upper stream released librime files if stable release
       - name: Get Rime files
@@ -71,14 +71,14 @@ jobs:
           RELEASE_BUILD: 1
         shell: cmd
         run: |
-          .\build.bat ARM64 installer
+          .\build.bat installer
 
       - name: Build Weasel Nightly
         id: build_weasel_nightly
         if: github.ref == 'refs/heads/master'
         shell: cmd
         run: |
-          .\build.bat ARM64 installer
+          .\build.bat installer
 
       - name: Compress Debug Symbols
         shell: pwsh
