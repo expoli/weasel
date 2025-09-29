@@ -71,14 +71,14 @@ jobs:
           RELEASE_BUILD: 1
         shell: cmd
         run: |
-          .\build.bat arm64 installer
+          .\build.bat ARM64 installer
 
       - name: Build Weasel Nightly
         id: build_weasel_nightly
         if: github.ref == 'refs/heads/master'
         shell: cmd
         run: |
-          .\build.bat arm64 installer
+          .\build.bat ARM64 installer
 
       - name: Compress Debug Symbols
         shell: pwsh
